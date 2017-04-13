@@ -1,10 +1,9 @@
 function randomizeAliveCells(dimension, cellCount) {
   let aliveCells = [];
   
-  // continut loop until set amount (amount of cells / 4) of unique numbers are generated
+  // continue loop until set amount (amount of cells / 4) of unique numbers are generated
   while(aliveCells.length < Math.floor(cellCount / 4)) {
     const aliveCell = Math.floor((Math.random() * cellCount) + 1);
-
     if(aliveCells.indexOf(aliveCell) === -1) {
       aliveCells.push(aliveCell);
     }
@@ -32,10 +31,10 @@ class Application extends React.Component {
       isRunning: true,
       lifespan: 100,
       boardWidth: 60 * 11,
+      // create array with length of dimension * dimension and populate every index with "dead" cell
       cells: new Array(60 * 60).fill({alive: false}),
       generations: 0
     };
-    
     this.initializeBoard = this.initializeBoard.bind(this);
     this.toggleExecution = this.toggleExecution.bind(this);
     this.changeLifespan = this.changeLifespan.bind(this);
@@ -107,6 +106,7 @@ class Application extends React.Component {
   cultivateNextGeneration() {
     const dimension = this.props.dimension;
     const cells = this.state.cells;
+    // create a reference free copy of cells array
     let nextGeneration = JSON.parse(JSON.stringify(cells));
     
     for(let cell = 0; cell < cells.length; cell++) {
@@ -202,10 +202,9 @@ class Application extends React.Component {
 
 
 function ElapsedGenerations(props) {
-  return (
-    <div className='elapsed-generations'>Generation: {props.generations}</div>
-  );
+  return <div className='elapsed-generations'>Generation: {props.generations}</div>;
 }
+
 
 function ControlPanel(props) {
   const slow = props.lifespan === 1000 ? 'slow active' : 'slow';
@@ -215,13 +214,13 @@ function ControlPanel(props) {
   return (
     <div className='control-panel'>
       <div className='board-controls'>
-        <button className='toggle-execution' onClick={props.toggleExecution}>
+        <button onClick={props.toggleExecution}>
           {props.isRunning ? 'Pause' : 'Resume'}
         </button>
-        <button className='clear-board' onClick={props.clearBoard}>
+        <button onClick={props.clearBoard}>
           Clear Board
         </button>
-        <button className='clear-board' onClick={props.restart}>
+        <button onClick={props.restart}>
           Restart
         </button>
       </div>
@@ -276,6 +275,5 @@ function Cell(props) {
     </div>
   );
 }
-
 
 ReactDOM.render(<Application dimension={60} />, document.getElementById('app'));
